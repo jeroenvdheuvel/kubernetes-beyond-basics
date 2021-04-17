@@ -22,8 +22,17 @@ spec:
     spec:
       containers:
         - name: pi-calculator
-          image: pi-calculator:nginx
+          image: pi-calculator:nginx-small-base
           imagePullPolicy: Never # Force Kubernetes to use local docker image
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
+          volumeMounts:
+            - name: pi-calculator
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: pi-calculator
+          configMap:
+            name: pi-calculator

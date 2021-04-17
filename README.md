@@ -1,32 +1,24 @@
-# Exercise 1: Provide configuration at runtime
-[Create configmap](https://kubernetes.io/docs/concepts/configuration/configmap/#configmaps-and-pods) and
-[use it in the Deployment (mount to pod)](https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps-as-files-from-a-pod),
-in order to make Docker image more reusable.
+# Exercise 2: Use smaller base image & run container without root
+[Use a smaller base image for Nginx](https://hub.docker.com/_/nginx) and [run the image without root](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container),
+for instance with user id: 65534 (nobody on Linux systems).  The Nginx configuration (ConfigMap) is already
+modified and will work without root. Keep in mind that ports < 1024 can only be claimed by root.
 
-The Nginx configuration for the ConfigMap can be found in nginx.conf.
-
-
-## Get started
-1. Add `127.0.0.1 pi-calculator.localhost` to hosts file (for Docker4mac. Other Kubernetes installers might use a
-   different ip).
-2. Apply Kubernetes files:
-    ```shell
-    kubectl apply -f .kubernetes
-    ```
-3. Go to `pi-calculator.localhost` in your browser and check if you see "standard" Nginx page.
-
+Image sizes can be checked via:
+```shell
+docker images
+```
 
 ## Via Docker
 ```shell
-docker build -t pi-calculator:nginx .
-docker run -ti --rm -v $PWD/nginx.conf:/etc/nginx/nginx.conf -p 8080:80 pi-calculator:nginx
+docker build -t pi-calculator:nginx-small-base .
+docker run -ti --rm -v $PWD/nginx.conf:/etc/nginx/nginx.conf -p 8080:8080 pi-calculator:nginx-small-base
 ```
 
 
 ## Useful commands
 Build docker image
 ```shell
-docker build -t pi-calculator:nginx .
+docker build -t pi-calculator:nginx-small-base .
 ```
 
 Apply Kubernetes files
