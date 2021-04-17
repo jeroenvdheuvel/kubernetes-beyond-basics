@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: pi-calculator
+  labels:
+    app.kubernetes.io/name: pi-calculator
+    app.kubernetes.io/part-of: kubernetes-workshop
+    app.kubernetes.io/kubernetes-component: deployment
+
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pi-calculator
+      app.kubernetes.io/part-of: kubernetes-workshop
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pi-calculator
+        app.kubernetes.io/part-of: kubernetes-workshop
+        app.kubernetes.io/kubernetes-component: pod
+    spec:
+      containers:
+        - name: pi-calculator
+          image: pi-calculator:nginx
+          imagePullPolicy: Never # Force Kubernetes to use local docker image
+          ports:
+            - name: http
+              containerPort: 80
