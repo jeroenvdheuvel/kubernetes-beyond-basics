@@ -1,28 +1,52 @@
-# Exercise 7: Horizontal pod autoscaling
-[Create horizontal pod autoscale configuration](https://www.giantswarm.io/blog/horizontal-autoscaling-in-kubernetes)
-for the deployment. The autoscaler should aim for 70% CPU utilization.
+# Exercise 8: Create and deploy Helm chart
+[Create a helm chart](https://helm.sh/docs/helm/helm_create/) that combines the Kubernetes files necessary to deploy the
+pi-calculator. Extract at least 1 variable from one of the templates and make it configurable by putting it in
+values.yaml.
 
-Make sure you installed the [Kubernetes metrics server](https://github.com/kubernetes-sigs/metrics-server) in order to
-keep track of resource utilization. The command below will install the Kubernetes metrics server in "insecure" mode.
-This is the easiest way to get it running on local machines.
+[Install helm](https://helm.sh/docs/intro/install/) on osx
 ```shell
-kubectl apply -f kubernetes-metrics-server.yaml
+brew install helm
+```
+For other operating systems follow the [Helm install guide](https://helm.sh/docs/intro/install/).
+
+Create your helm chart
+```shell
+helm create .helm
 ```
 
-View kubectl information about your autoscale configuration
+Install your helm chart
 ```shell
-kubectl get hpa
+helm upgrade --install --wait pi-calculator .helm
 ```
 
-View events of your autoscale configuration 
-```shell
-kubectl describe hpa -l app.kubernetes.io/name=pi-calculator
-```
+The `.helm/templates` directory can be emptied before putting your yaml files here. The `values.yaml` can be cleared
+cleared as well, to start with a clean slate. 
 
 Simulate load with `load-generator.sh` that keeps on making curl requests to http://pi-calculator.localhost/
 
 
 ## Useful commands
+[Install helm](https://helm.sh/docs/intro/install/) on osx
+```shell
+brew install helm
+```
+For other operating systems follow the [Helm install guide](https://helm.sh/docs/intro/install/).
+
+Create your helm chart
+```shell
+helm create .helm
+```
+
+Install your helm chart
+```shell
+helm upgrade --install --wait pi-calculator .helm
+```
+
+Uninstall your helm chart
+```shell
+helm uninstall pi-calculator
+```
+
 Build docker image
 ```shell
 docker build -t pi-calculator:php-fpm .

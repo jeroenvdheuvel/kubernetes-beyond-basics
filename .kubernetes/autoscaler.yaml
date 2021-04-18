@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+
+metadata:
+  name: pi-calculator
+  labels:
+    app.kubernetes.io/name: pi-calculator
+    app.kubernetes.io/part-of: kubernetes-workshop
+    app.kubernetes.io/kubernetes-component: horizontal-pod-autoscaler
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pi-calculator
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
