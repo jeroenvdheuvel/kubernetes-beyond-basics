@@ -28,6 +28,18 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
           volumeMounts:
             - name: pi-calculator
               mountPath: /etc/nginx/nginx.conf
@@ -36,6 +48,15 @@ spec:
         - name: php
           image: pi-calculator:php-fpm
           imagePullPolicy: Never # Force Kubernetes to use local docker image
+          startupProbe:
+            tcpSocket:
+              port: 9000
+          readinessProbe:
+            tcpSocket:
+              port: 9000
+          livenessProbe:
+            tcpSocket:
+              port: 9000
       volumes:
         - name: pi-calculator
           configMap:
