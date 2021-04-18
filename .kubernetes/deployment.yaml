@@ -23,8 +23,8 @@ spec:
       securityContext:
         runAsUser: 65534
       containers:
-        - name: pi-calculator
-          image: pi-calculator:nginx-multistage
+        - name: nginx
+          image: nginx:1.19-alpine
           ports:
             - name: http
               containerPort: 8080
@@ -33,7 +33,9 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
               readOnly: true
-
+        - name: php
+          image: pi-calculator:php-fpm
+          imagePullPolicy: Never # Force Kubernetes to use local docker image
       volumes:
         - name: pi-calculator
           configMap:

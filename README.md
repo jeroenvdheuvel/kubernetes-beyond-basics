@@ -1,13 +1,12 @@
-# Exercise 4: Generate HTML via multistage build
-Generate index.html (via pi-html-generator.php & pi-calculator.php) with PHP
-(first stage) and copy the index.html to the Nginx image (second stage).
+# Exercise 5: Health checks
+[Add any (startup, readiness, liveness) health check probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+to both containers.
 
-More about [Docker multistage images can be found here](https://docs.docker.com/develop/develop-images/multistage-build/).
 
 ## Useful commands
 Build docker image
 ```shell
-docker build -t pi-calculator:nginx-multistage .
+docker build -t pi-calculator:php-fpm .
 ```
 
 Apply Kubernetes files
