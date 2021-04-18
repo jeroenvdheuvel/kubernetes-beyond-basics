@@ -1,24 +1,13 @@
-# Exercise 3: Generate HTML via initContainer
-Generate the index.html in an [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#init-containers-in-use)
-and share the generated file via an empty directory to Nginx.
+# Exercise 4: Generate HTML via multistage build
+Generate index.html (via pi-html-generator.php & pi-calculator.php) with PHP
+(first stage) and copy the index.html to the Nginx image (second stage).
 
-The number of ITERATIONS and FILENAME (to export) can be modified via [environment variables](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container).
-```yaml
-env:
-  - name: FILENAME
-    value: /tmp/index.html
-  - name: ITERATIONS
-    value: "999999"
-```
-
-Make sure `imagePullPolicy: Never # Force Kubernetes to use local docker image` a part of the pi-calculator container
-configuration. Otherwise, Kubernetes will try to pull the pi-calculator image from a remote repository (where it doesn't exist).
-
+More about [Docker multistage images can be found here](https://docs.docker.com/develop/develop-images/multistage-build/).
 
 ## Useful commands
 Build docker image
 ```shell
-docker build -t pi-calculator:html-generator .
+docker build -t pi-calculator:nginx-multistage .
 ```
 
 Apply Kubernetes files
