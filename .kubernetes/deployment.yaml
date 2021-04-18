@@ -45,6 +45,13 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
               readOnly: true
+          resources:
+            requests:
+              memory: 8Mi
+              cpu: 10m
+            limits:
+              memory: 8Mi
+              cpu: 10m
         - name: php
           image: pi-calculator:php-fpm
           imagePullPolicy: Never # Force Kubernetes to use local docker image
@@ -57,6 +64,13 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 9000
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 500m
+            limits:
+              memory: 16Mi
+              cpu: 1000m
       volumes:
         - name: pi-calculator
           configMap:

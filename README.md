@@ -1,21 +1,25 @@
-# Exercise 6: Define container resources
-Define [CPU and memory requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
-for both containers.
+# Exercise 7: Horizontal pod autoscaling
+[Create horizontal pod autoscale configuration](https://www.giantswarm.io/blog/horizontal-autoscaling-in-kubernetes)
+for the deployment. The autoscaler should aim for 70% CPU utilization.
 
-[Docker stats](https://docs.docker.com/engine/reference/commandline/stats/) can give you more information about the CPU
-and memory utilization.
+Make sure you installed the [Kubernetes metrics server](https://github.com/kubernetes-sigs/metrics-server) in order to
+keep track of resource utilization. The command below will install the Kubernetes metrics server in "insecure" mode.
+This is the easiest way to get it running on local machines.
 ```shell
-docker stats
+kubectl apply -f kubernetes-metrics-server.yaml
 ```
 
-These resource values should work:
-Nginx
-Memory request: 8mb, limit: 8mb
-CPU request: 0.01, limit 0.01
+View kubectl information about your autoscale configuration
+```shell
+kubectl get hpa
+```
 
-PHP-FPM
-Memory request: 16mb, limit: 16mb
-CPU request: 0.25, limit: 0.5 (over commit)
+View events of your autoscale configuration 
+```shell
+kubectl describe hpa -l app.kubernetes.io/name=pi-calculator
+```
+
+Simulate load with `load-generator.sh` that keeps on making curl requests to http://pi-calculator.localhost/
 
 
 ## Useful commands
