@@ -1,5 +1,7 @@
-FROM nginx:1.19
+FROM php:8.0-alpine
 
 WORKDIR /var/www/html
 
-COPY index.html .
+COPY *.php .
+
+CMD php pi-html-generator.php

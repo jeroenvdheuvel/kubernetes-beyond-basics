@@ -1,24 +1,24 @@
-# Exercise 2: Use smaller base image & run container without root
-[Use a smaller base image for Nginx](https://hub.docker.com/_/nginx) and [run the image without root](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container),
-for instance with user id: 65534 (nobody on Linux systems).  The Nginx configuration (ConfigMap) is already
-modified and will work without root. Keep in mind that ports < 1024 can only be claimed by root.
+# Exercise 3: Generate HTML via initContainer
+Generate the index.html in an [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#init-containers-in-use)
+and share the generated file via an empty directory to Nginx.
 
-Image sizes can be checked via:
-```shell
-docker images
+The number of ITERATIONS and FILENAME (to export) can be modified via [environment variables](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container).
+```yaml
+env:
+  - name: FILENAME
+    value: /tmp/index.html
+  - name: ITERATIONS
+    value: "999999"
 ```
 
-## Via Docker
-```shell
-docker build -t pi-calculator:nginx-small-base .
-docker run -ti --rm -v $PWD/nginx.conf:/etc/nginx/nginx.conf -p 8080:8080 pi-calculator:nginx-small-base
-```
+Make sure `imagePullPolicy: Never # Force Kubernetes to use local docker image` a part of the pi-calculator container
+configuration. Otherwise, Kubernetes will try to pull the pi-calculator image from a remote repository (where it doesn't exist).
 
 
 ## Useful commands
 Build docker image
 ```shell
-docker build -t pi-calculator:nginx-small-base .
+docker build -t pi-calculator:html-generator .
 ```
 
 Apply Kubernetes files
